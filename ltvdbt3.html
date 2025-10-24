@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bài tập 3 - Duyệt và sửa nội dung</title>
+    <style>
+      :root {
+        --panel: #d6c6bc;
+        --btn: #0f2a3a;
+        --btn-fg: #e6f1f7;
+      }
+      body {
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial,
+          sans-serif;
+        margin: 0;
+        padding: 24px;
+        color: #0f172a;
+        background: var(--panel);
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+      }
+      h2 {
+        margin-top: 0;
+        font-weight: 700;
+      }
+      .stack {
+        display: grid;
+        gap: 8px;
+        place-items: center;
+      }
+      .btn {
+        height: 36px;
+        padding: 0 14px;
+        border-radius: 6px;
+        cursor: pointer;
+        border: 1px solid var(--btn);
+        background: var(--btn);
+        color: var(--btn-fg);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="stack" id="content">
+      <div class="editable">Đoạn 1</div>
+      <div class="editable">Đoạn 2</div>
+      <button class="btn" id="editBtn">Sửa văn bản</button>
+    </div>
+
+    <script>
+      const btn = document.getElementById("editBtn");
+      const container = document.getElementById("content");['']
+
+      btn.addEventListener("click", () => {
+        const nodes = container.querySelectorAll(".editable");
+        nodes.forEach((node) => {
+          const oldText = node.textContent.trim();
+
+          if (!oldText.endsWith("(đã sữa)")) {
+            node.textContent = `${oldText} (đã sữa)`;
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

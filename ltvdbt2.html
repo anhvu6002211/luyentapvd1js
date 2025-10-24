@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Đổi màu nền theo nhập liệu</title>
+    <style>
+      :root {
+        --bg: #d6c6bc; /* màu nền mặc định gần giống ảnh */
+        --btn: #0f2a3a;
+        --btn-fg: #e6f1f7;
+        --input-border: #c7cbd1;
+        --error: #dc2626;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial,
+          sans-serif;
+        color: #0f172a;
+        display: grid;
+        place-items: center;
+        padding: 12px;
+      }
+      .control {
+        display: inline-flex;
+        align-items: center;
+        gap: 0;
+        background: white;
+        border-radius: 6px;
+        overflow: hidden;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      }
+      .control input[type="text"] {
+        width: min(280px, 60vw);
+        height: 36px;
+        border: 1px solid var(--input-border);
+        border-right: none;
+        padding: 0 10px;
+        outline: none;
+        font-size: 14px;
+        border-top-left-radius: 6px;
+        border-bottom-left-radius: 6px;
+      }
+      .control button {
+        height: 36px;
+        padding: 0 14px;
+        border: 1px solid var(--btn);
+        background: var(--btn);
+        color: var(--btn-fg);
+        font-size: 14px;
+        cursor: pointer;
+        border-top-right-radius: 6px;
+        border-bottom-right-radius: 6px;
+      }
+
+      .shake {
+        animation: shake 0.25s linear 1;
+      }
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-3px);
+        }
+        50% {
+          transform: translateX(3px);
+        }
+        75% {
+          transform: translateX(-2px);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <div class="control" id="control">
+        <input
+          id="colorInput"
+          type="text"
+          placeholder="Nhập màu"
+          aria-label="Nhập màu (ví dụ: #ffccaa, red, rgb(120,200,150))"
+        />
+        <button id="applyBtn">Áp dụng</button>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        const input = document.getElementById("colorInput");
+        const btn = document.getElementById("applyBtn");
+        const control = document.getElementById("control");
+
+        function isValidColor(str) {
+          if (!str) return false;
+          const s = new Option().style;
+          s.color = "";
+          s.color = str;
+          return !!s.color; // chỉ true nếu trình duyệt hiểu màu
+        }
+
+        function apply() {
+          const raw = input.value.trim();
+          if (!isValidColor(raw)) {
+            control.classList.remove("shake");
+            void control.offsetWidth; // reset animation
+            control.classList.add("shake");
+            input.style.borderColor = "var(--error)";
+            setTimeout(() => {
+              input.style.borderColor = "var(--input-border)";
+            }, 400);
+            return;
+          }
+          // áp dụng
+          document.documentElement.style.setProperty("--bg", raw);
+          // đổi màu nền của body theo yêu cầu
+          document.body.style.background = raw;
+        }
+
+        btn.addEventListener("click", apply);
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") apply();
+        });
+
+        // tự focus để nhập nhanh
+        setTimeout(() => input.focus(), 50);
+      })();
+    </script>
+  </body>
+</html>
